@@ -259,7 +259,7 @@ class DataGenerator():
         else:
             raise NotImplementedError
 
-        # if the dataset is too small, generating duplicate smaples up to n_samples_threshold
+        # Nếu tập dữ liệu nhỏ, sinh duplicate smaples cho tới n_samples_threshold
         if len(y) < self.n_samples_threshold and self.generate_duplicates:
             print(f'generating duplicate samples for dataset {self.dataset}...')
             self.utils.set_seed(self.seed)

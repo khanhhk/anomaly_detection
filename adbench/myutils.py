@@ -11,13 +11,8 @@ import json
 import time
 import wget
 import zipfile
-# metric
 from sklearn.metrics import roc_auc_score, average_precision_score
-
-# plot
 import matplotlib.pyplot as plt
-
-# statistical analysis
 from scipy.stats import wilcoxon
 
 class Utils():
@@ -26,11 +21,6 @@ class Utils():
 
     # remove randomness
     def set_seed(self, seed):
-        # os.environ['PYTHONHASHSEED'] = str(seed)
-        # os.environ['TF_CUDNN_DETERMINISTIC'] = 'true'
-        # os.environ['TF_DETERMINISTIC_OPS'] = 'true'
-
-        # basic seed
         np.random.seed(seed)
         random.seed(seed)
 
