@@ -127,7 +127,8 @@ class RunPipeline():
     # dataset filter for delelting those datasets that do not satisfy the experimental requirement
     def dataset_filter(self):
         # dataset list in the current folder
-        dataset_list_org = list(itertools.chain(*self.data_generator.generate_dataset_list()))
+        dataset_list_org = self.data_generator.generate_dataset_list()
+
 
         dataset_list, dataset_size = [], []
         for dataset in dataset_list_org:
@@ -247,11 +248,6 @@ class RunPipeline():
                 dataset, la, self.seed = params
 
             if self.parallel == 'unsupervise' and la != 0.0 and self.noise_type is None:
-                continue
-
-            # We only run one time on CV / NLP datasets for considering computational cost
-            # The final results are the average performance on different classes
-            if self.isin_NLPCV(dataset) and self.seed > 1:
                 continue
 
             # generate data

@@ -221,8 +221,6 @@ class DataGenerator():
 
         # set seed for reproducible results
         self.utils.set_seed(self.seed)
-        print("Current dataset:", self.dataset)
-        print("Available datasets:", self.dataset_list_classical)
 
         # load dataset
         if self.dataset is None:
