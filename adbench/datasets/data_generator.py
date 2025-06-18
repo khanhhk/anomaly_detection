@@ -18,7 +18,7 @@ class DataGenerator():
     def __init__(self, seed:int=42, dataset:str=None, test_size:float=0.3,
                  generate_duplicates=True, n_samples_threshold=1000):
         '''
-        :param seed: để reproducible results
+        :param seed: 
         :param dataset: tên tập dữ liệu
         :param test_size: kích thước tập test
         :param generate_duplicates: Sinh duplicated samples khi kích thước mẫu quá nhỏ
@@ -34,7 +34,7 @@ class DataGenerator():
         self.n_samples_threshold = n_samples_threshold
 
         # dataset list
-        self.dataset_list_classical, self.dataset_list_cv, self.dataset_list_nlp = self.generate_dataset_list()
+        self.dataset_list_classical = self.generate_dataset_list()
 
         # myutils function
         self.utils = Utils()
@@ -44,16 +44,7 @@ class DataGenerator():
         dataset_list_classical = [os.path.splitext(_)[0] for _ in
                                   os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Classical'))
                                   if os.path.splitext(_)[1] == '.npz']
-        # CV datasets
-        dataset_list_cv = [os.path.splitext(_)[0] for _ in
-                           os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'CV_by_ResNet18'))
-                           if os.path.splitext(_)[1] == '.npz']
-        # NLP datasets
-        dataset_list_nlp = [os.path.splitext(_)[0] for _ in
-                            os.listdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'NLP_by_BERT'))
-                            if os.path.splitext(_)[1] == '.npz']
-
-        return dataset_list_classical, dataset_list_cv, dataset_list_nlp
+        return dataset_list_classical
 
 
     def generate_realistic_synthetic(self, X, y, realistic_synthetic_mode, alpha:int, percentage:float):
@@ -230,6 +221,8 @@ class DataGenerator():
 
         # set seed for reproducible results
         self.utils.set_seed(self.seed)
+        print("Current dataset:", self.dataset)
+        print("Available datasets:", self.dataset_list_classical)
 
         # load dataset
         if self.dataset is None:
@@ -238,10 +231,6 @@ class DataGenerator():
         else:
             if self.dataset in self.dataset_list_classical:
                 data = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Classical', self.dataset + '.npz'), allow_pickle=True)
-            elif self.dataset in self.dataset_list_cv:
-                data = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'CV_by_ResNet18', self.dataset + '.npz'), allow_pickle=True)
-            elif self.dataset in self.dataset_list_nlp:
-                data = np.load(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'NLP_by_BERT', self.dataset + '.npz'), allow_pickle=True)
             else:
                 raise NotImplementedError
 
@@ -249,15 +238,18 @@ class DataGenerator():
             y = data['y']
 
         # Số labeled anomalies trong original data
-        if type(la) == float:
+        if isinstance(la, (float, np.floating)):
             if at_least_one_labeled:
                 n_labeled_anomalies = ceil(sum(y) * (1 - self.test_size) * la)
             else:
                 n_labeled_anomalies = int(sum(y) * (1 - self.test_size) * la)
-        elif type(la) == int:
+        elif isinstance(la, (int, np.integer)):
             n_labeled_anomalies = la
+        elif la is None:
+            raise ValueError("Tham số la (số lượng hoặc tỉ lệ labeled anomalies) đang là None! Cần truyền giá trị int hoặc float cho la.")
         else:
-            raise NotImplementedError
+            raise NotImplementedError(f"Không hỗ trợ kiểu {type(la)} cho biến 'la'.")
+
 
         # Nếu tập dữ liệu nhỏ, sinh duplicate smaples cho tới n_samples_threshold
         if len(y) < self.n_samples_threshold and self.generate_duplicates:
@@ -345,18 +337,19 @@ class DataGenerator():
         idx_normal = np.where(y_train == 0)[0]
         idx_anomaly = np.where(y_train == 1)[0]
 
-        if type(la) == float:
+        if isinstance(la, (float, np.floating)):
             if at_least_one_labeled:
-                idx_labeled_anomaly = np.random.choice(idx_anomaly, ceil(la * len(idx_anomaly)), replace=False)
+                num_to_select = min(ceil(la * len(idx_anomaly)), len(idx_anomaly))
             else:
-                idx_labeled_anomaly = np.random.choice(idx_anomaly, int(la * len(idx_anomaly)), replace=False)
-        elif type(la) == int:
+                num_to_select = min(int(la * len(idx_anomaly)), len(idx_anomaly))
+            idx_labeled_anomaly = np.random.choice(idx_anomaly, num_to_select, replace=False)
+        elif isinstance(la, (int, np.integer)):
             if la > len(idx_anomaly):
-                raise AssertionError(f'the number of labeled anomalies are greater than the total anomalies: {len(idx_anomaly)} !')
-            else:
-                idx_labeled_anomaly = np.random.choice(idx_anomaly, la, replace=False)
+                raise AssertionError(f'The number of labeled anomalies ({la}) exceeds total anomalies: {len(idx_anomaly)}')
+            idx_labeled_anomaly = np.random.choice(idx_anomaly, la, replace=False)
         else:
-            raise NotImplementedError
+            raise NotImplementedError(f"Không hỗ trợ kiểu {type(la)} cho biến 'la'.")
+
 
         idx_unlabeled_anomaly = np.setdiff1d(idx_anomaly, idx_labeled_anomaly)
         # whether to remove the anomaly contamination in the unlabeled data

@@ -36,7 +36,7 @@ class Utils():
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
 
-    def get_device(self, gpu_specific=False):
+    def get_device(self, gpu_specific=True):
         if gpu_specific:
             if torch.cuda.is_available():
                 n_gpu = torch.cuda.device_count()
@@ -57,53 +57,23 @@ class Utils():
         return int(u)
 
     # download datasets from the remote git repo
-    def download_datasets(self, repo='jihulab'):
+    def download_datasets(self):
         print('if there is any question while downloading datasets, we suggest you to download it from the website:')
         print('https://github.com/Minqi824/ADBench/tree/main/adbench/datasets')
-        print('如果您在中国大陆地区，请使用链接：')
-        print('https://jihulab.com/BraudoCC/ADBench_datasets/')
         # folder_list = ['CV_by_ResNet18', 'CV_by_ViT', 'NLP_by_BERT', 'NLP_by_RoBERTa', 'Classical']
         folder_list = ['CV_by_ResNet18', 'NLP_by_BERT', 'Classical']
         
-        if repo == 'github':
-            fs = fsspec.filesystem("github", org="Minqi824", repo="ADBench")
-            print(f'Downloading datasets from the remote github repo...')
-            for folder in tqdm(folder_list):
-                save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'datasets', folder)
-                print(f'Current saving path: {save_path}')
-                if os.path.exists(save_path):
-                    print(f'{folder} already exists. Skipping download...')
-                    continue
+        fs = fsspec.filesystem("github", org="Minqi824", repo="ADBench")
+        print(f'Downloading datasets from the remote github repo...')
+        for folder in tqdm(folder_list):
+            save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'datasets', folder)
+            print(f'Current saving path: {save_path}')
+            if os.path.exists(save_path):
+                print(f'{folder} already exists. Skipping download...')
+                continue
 
-                os.makedirs(save_path, exist_ok=True)
-                fs.get(fs.ls("adbench/datasets/" + folder), save_path, recursive=True)
-        
-        elif repo == 'jihulab':
-            print(f'Downloading datasets from jihulab...')
-            url_repo = 'https://jihulab.com/BraudoCC/ADBench_datasets/-/raw/339d2ab2d53416854f6535442a67393634d1a778'
-            # load the datasets path
-            url_dictionary = url_repo + '/datasets_files_name.json'
-            wget.download(url_dictionary,out = './datasets_files_name.json')
-            with open('./datasets_files_name.json', 'r') as json_file:
-                loaded_dict = json.loads(json_file.read())
-
-            # download datasets
-            for folder in tqdm(folder_list):
-                datasets_list = loaded_dict[folder]
-                save_fold_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'datasets', folder)
-                if os.path.exists(save_fold_path) is False:
-                    os.makedirs(save_fold_path, exist_ok=True)
-                for datasets in datasets_list:
-                    save_path = os.path.join(save_fold_path, datasets)
-                    if os.path.exists(save_path):
-                        print(f'{datasets} already exists. Skipping download...')
-                        continue
-                    print(f'Current saving path: {save_path}')
-                    # url = os.path.join(url_repo,folder,datasets)
-                    url = f'{url_repo}/{folder}/{datasets}'
-                    wget.download(url,out = save_path)
-        else:
-            raise NotImplementedError
+            os.makedirs(save_path, exist_ok=True)
+            fs.get(fs.ls("adbench/datasets/" + folder), save_path, recursive=True)
 
     def data_description(self, X, y):
         des_dict = {}
@@ -115,7 +85,7 @@ class Utils():
         print(des_dict)
 
     # metric
-    def metric(self, y_true, y_score, pos_label=1):
+    def metric(self, y_true, y_score):
         aucroc = roc_auc_score(y_true=y_true, y_score=y_score)
         aucpr = average_precision_score(y_true=y_true, y_score=y_score, pos_label=1)
 

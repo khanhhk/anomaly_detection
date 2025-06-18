@@ -57,7 +57,8 @@ class RunPipeline():
         # number of labeled anomalies
         self.nla_list = [0, 1, 5, 10, 25, 50, 75, 100]
         # seed list
-        self.seed_list = list(np.arange(3) + 1)
+        self.seed_list = [int(i) for i in (np.arange(3) + 1)]
+
 
         if self.noise_type is None:
             pass
@@ -79,12 +80,12 @@ class RunPipeline():
 
         # unsupervised algorithms
         if self.parallel == 'unsupervise':
-            from adbench.baseline.PyOD import PYOD
-            from adbench.baseline.DAGMM.run import DAGMM
+            from adbench.baseline.unsupervised.PyOD import PYOD
+            from adbench.baseline.unsupervised.DAGMM.run import DAGMM
 
             # from pyod
-            for _ in ['IForest', 'OCSVM', 'CBLOF', 'COF', 'COPOD', 'ECOD', 'FeatureBagging', 'HBOS', 'KNN', 'LODA',
-                      'LOF', 'LSCP', 'MCD', 'PCA', 'SOD', 'SOGAAL', 'MOGAAL', 'DeepSVDD']:
+            for _ in ['IForest', 'OCSVM', 'CBLOF', 'COF', 'COPOD', 'ECOD', 'HBOS', 'KNN', 'LODA',
+                      'LOF', 'PCA', 'SOD', 'DeepSVDD']:
                 self.model_dict[_] = PYOD
 
             # DAGMM
@@ -92,13 +93,13 @@ class RunPipeline():
 
         # semi-supervised algorithms
         elif self.parallel == 'semi-supervise':
-            from adbench.baseline.PyOD import PYOD
-            from adbench.baseline.GANomaly.run import GANomaly
-            from adbench.baseline.DeepSAD.src.run import DeepSAD
-            from adbench.baseline.REPEN.run import REPEN
-            from adbench.baseline.DevNet.run import DevNet
-            from adbench.baseline.PReNet.run import PReNet
-            from adbench.baseline.FEAWAD.run import FEAWAD
+            from adbench.baseline.semisupervised.PyOD import PYOD
+            from adbench.baseline.semisupervised.GANomaly.run import GANomaly
+            from adbench.baseline.semisupervised.DeepSAD.src.run import DeepSAD
+            from adbench.baseline.semisupervised.REPEN.run import REPEN
+            from adbench.baseline.semisupervised.DevNet.run import DevNet
+            from adbench.baseline.semisupervised.PReNet.run import PReNet
+            from adbench.baseline.semisupervised.FEAWAD.run import FEAWAD
 
             self.model_dict = {'GANomaly': GANomaly,
                                'DeepSAD': DeepSAD,
@@ -110,11 +111,11 @@ class RunPipeline():
 
         # fully-supervised algorithms
         elif self.parallel == 'supervise':
-            from adbench.baseline.Supervised import supervised
-            from adbench.baseline.FTTransformer.run import FTTransformer
+            from adbench.baseline.supervised.Supervised import supervised
+            from adbench.baseline.supervised.FTTransformer.run import FTTransformer
 
             # from sklearn
-            for _ in ['LR', 'NB', 'SVM', 'MLP', 'RF', 'LGB', 'XGB', 'CatB']:
+            for _ in ['NB', 'SVM', 'MLP', 'RF', 'LGB', 'XGB', 'CatB']:
                 self.model_dict[_] = supervised
             # ResNet and FTTransformer for tabular data
             for _ in ['ResNet', 'FTTransformer']:
@@ -122,11 +123,6 @@ class RunPipeline():
 
         else:
             raise NotImplementedError
-
-        # We remove the following model for considering the computational cost
-        for _ in ['SOGAAL', 'MOGAAL', 'LSCP', 'MCD', 'FeatureBagging']:
-            if _ in self.model_dict.keys():
-                self.model_dict.pop(_)
 
     # dataset filter for delelting those datasets that do not satisfy the experimental requirement
     def dataset_filter(self):
@@ -154,11 +150,6 @@ class RunPipeline():
                     else:
                         add = False
 
-            # remove high-dimensional CV and NLP datasets if generating synthetic anomalies or robustness test
-            if self.realistic_synthetic_mode is not None or self.noise_type is not None:
-                if self.isin_NLPCV(dataset):
-                    add = False
-
             if add:
                 dataset_list.append(dataset)
                 dataset_size.append(len(data['y_train']) + len(data['y_test']))
@@ -169,17 +160,6 @@ class RunPipeline():
         dataset_list = [dataset_list[_] for _ in np.argsort(np.array(dataset_size))]
 
         return dataset_list
-
-    # whether the dataset in the NLP / CV dataset
-    # currently we have 5 NLP datasets and 5 CV datasets
-    def isin_NLPCV(self, dataset):
-        if dataset is None:
-            return False
-        else:
-            NLPCV_list = ['agnews', 'amazon', 'imdb', 'yelp', '20news',
-                          'MNIST-C', 'FashionMNIST', 'CIFAR10', 'SVHN', 'MVTec-AD']
-
-            return any([_ in dataset for _ in NLPCV_list])
 
     # model fitting function
     def model_fit(self):
@@ -209,7 +189,7 @@ class RunPipeline():
             end_time = time.time(); time_inference = end_time - start_time
 
             # performance
-            result = self.utils.metric(y_true=self.data['y_test'], y_score=score_test, pos_label=1)
+            result = self.utils.metric(y_true=self.data['y_test'], y_score=score_test)
 
             K.clear_session()
             print(f"Model: {self.model_name}, AUC-ROC: {result['aucroc']}, AUC-PR: {result['aucpr']}")
