@@ -1,6 +1,6 @@
-from adbench.baseline.DeepSAD.src.base.base_trainer import BaseTrainer
-from adbench.baseline.DeepSAD.src.base import BaseADDataset
-from adbench.baseline.DeepSAD.src.base import BaseNet
+from adbench.baseline.semisupervised.DeepSAD.src.base.base_trainer import BaseTrainer
+from adbench.baseline.semisupervised.DeepSAD.src.base import BaseADDataset
+from adbench.baseline.semisupervised.DeepSAD.src.base import BaseNet
 from sklearn.metrics import roc_auc_score, average_precision_score
 
 import logging

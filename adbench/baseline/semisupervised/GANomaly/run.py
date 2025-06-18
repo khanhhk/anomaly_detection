@@ -3,9 +3,9 @@ import torch
 from torch.utils.data import DataLoader, TensorDataset
 from torch import nn
 
-from adbench.baseline.GANomaly.model import generator
-from adbench.baseline.GANomaly.model import discriminator
-from adbench.baseline.GANomaly.fit import fit
+from adbench.baseline.semisupervised.GANomaly.model import generator
+from adbench.baseline.semisupervised.GANomaly.model import discriminator
+from adbench.baseline.semisupervised.GANomaly.fit import fit
 
 class GANomaly():
     def __init__(self, seed:int, model_name='GANomaly', epochs:int=50, batch_size:int=64,

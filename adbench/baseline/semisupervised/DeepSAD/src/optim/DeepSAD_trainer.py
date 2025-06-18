@@ -1,6 +1,6 @@
-from adbench.baseline.DeepSAD.src.base.base_trainer import BaseTrainer
-from adbench.baseline.DeepSAD.src.base import BaseADDataset
-from adbench.baseline.DeepSAD.src.base import BaseNet
+from adbench.baseline.semisupervised.DeepSAD.src.base.base_trainer import BaseTrainer
+from adbench.baseline.semisupervised.DeepSAD.src.base import BaseADDataset
+from adbench.baseline.semisupervised.DeepSAD.src.base import BaseNet
 from torch.utils.data.dataloader import DataLoader
 
 import logging

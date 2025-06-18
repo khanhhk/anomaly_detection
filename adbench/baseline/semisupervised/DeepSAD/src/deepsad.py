@@ -1,10 +1,10 @@
 import json
 import torch
 
-from adbench.baseline.DeepSAD.src.base import BaseADDataset
-from adbench.baseline.DeepSAD.src.networks import build_network, build_autoencoder
-from adbench.baseline.DeepSAD.src.optim.DeepSAD_trainer import DeepSADTrainer
-from adbench.baseline.DeepSAD.src.optim import AETrainer
+from adbench.baseline.semisupervised.DeepSAD.src.base import BaseADDataset
+from adbench.baseline.semisupervised.DeepSAD.src.networks import build_network, build_autoencoder
+from adbench.baseline.semisupervised.DeepSAD.src.optim.DeepSAD_trainer import DeepSADTrainer
+from adbench.baseline.semisupervised.DeepSAD.src.optim import AETrainer
 
 
 class deepsad(object):

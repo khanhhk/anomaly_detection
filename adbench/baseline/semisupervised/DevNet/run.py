@@ -32,7 +32,7 @@ import sys
 import os
 from scipy.sparse import vstack, csc_matrix
 # from utils import dataLoading, aucPerformance, writeResults, get_data_from_svmlight_file
-from adbench.baseline.DevNet.utils import dataLoading, aucPerformance
+from adbench.baseline.semisupervised.DevNet.utils import dataLoading, aucPerformance
 from sklearn.model_selection import train_test_split
 from adbench.myutils import Utils
 import time

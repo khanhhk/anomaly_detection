@@ -1,5 +1,5 @@
 import numpy as np
-from adbench.baseline.REPEN.model import repen
+from adbench.baseline.semisupervised.REPEN.model import repen
 from adbench.myutils import Utils
 import os
 

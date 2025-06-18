@@ -3,8 +3,8 @@ import torch.nn.functional as F
 
 from torch import nn
 from itertools import repeat
-from adbench.baseline.DeepSAD.src.utils import enumerate_discrete, log_sum_exp
-from adbench.baseline.DeepSAD.src.networks import log_standard_categorical
+from adbench.baseline.semisupervised.DeepSAD.src.utils import enumerate_discrete, log_sum_exp
+from adbench.baseline.semisupervised.DeepSAD.src.networks import log_standard_categorical
 
 
 # Acknowledgements: https://github.com/wohlert/semi-supervised-pytorch

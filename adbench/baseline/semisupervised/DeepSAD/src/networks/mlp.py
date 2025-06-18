@@ -1,7 +1,7 @@
 import torch.nn as nn
 import torch.nn.functional as F
 
-from adbench.baseline.DeepSAD.src.base import BaseNet
+from adbench.baseline.semisupervised.DeepSAD.src.base import BaseNet
 
 
 class MLP(BaseNet):

@@ -1,7 +1,7 @@
 from torch.utils.data import Subset
 from PIL import Image
 from torchvision.datasets import MNIST
-from adbench.baseline.DeepSAD.src.base.torchvision_dataset import TorchvisionDataset
+from adbench.baseline.semisupervised.DeepSAD.src.base.torchvision_dataset import TorchvisionDataset
 from .preprocessing import create_semisupervised_setting
 
 import torch

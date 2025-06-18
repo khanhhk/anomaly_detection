@@ -3,8 +3,8 @@ from torch import nn
 import numpy as np
 
 from adbench.myutils import Utils
-from adbench.baseline.PReNet.model import prenet
-from adbench.baseline.PReNet.fit import fit
+from adbench.baseline.semisupervised.PReNet.model import prenet
+from adbench.baseline.semisupervised.PReNet.fit import fit
 
 '''
 The unofficial implement (with PyTorch) of the PReNet model in the paper "Deep Weakly-supervised Anomaly Detection"

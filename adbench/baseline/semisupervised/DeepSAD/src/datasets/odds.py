@@ -1,6 +1,6 @@
 from torch.utils.data import DataLoader
-from adbench.baseline.DeepSAD.src.base import BaseADDataset
-from adbench.baseline.DeepSAD.src.base.odds_dataset import ODDSDataset
+from adbench.baseline.semisupervised.DeepSAD.src.base import BaseADDataset
+from adbench.baseline.semisupervised.DeepSAD.src.base.odds_dataset import ODDSDataset
 
 
 class ODDSADDataset(BaseADDataset):
