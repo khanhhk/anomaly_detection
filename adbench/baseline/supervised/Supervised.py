@@ -1,4 +1,3 @@
-from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
@@ -15,7 +14,7 @@ class supervised():
         self.utils = Utils()
 
         self.model_name = model_name
-        self.model_dict = {'LR':LogisticRegression,
+        self.model_dict = {
                            'NB':GaussianNB,
                            'SVM':SVC,
                            'MLP':MLPClassifier,
@@ -24,7 +23,7 @@ class supervised():
                            'XGB':xgb.XGBClassifier,
                            'CatB':CatBoostClassifier}
 
-    def fit(self, X_train, y_train, ratio=None):
+    def fit(self, X_train, y_train):
         if self.model_name == 'NB':
             self.model = self.model_dict[self.model_name]()
         elif self.model_name == 'SVM':
