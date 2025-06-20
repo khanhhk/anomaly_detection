@@ -56,25 +56,6 @@ class Utils():
         u = 0.5 * (a + b) * (a + b + 1) + b
         return int(u)
 
-    # download datasets from the remote git repo
-    def download_datasets(self):
-        print('if there is any question while downloading datasets, we suggest you to download it from the website:')
-        print('https://github.com/Minqi824/ADBench/tree/main/adbench/datasets')
-        # folder_list = ['CV_by_ResNet18', 'CV_by_ViT', 'NLP_by_BERT', 'NLP_by_RoBERTa', 'Classical']
-        folder_list = ['CV_by_ResNet18', 'NLP_by_BERT', 'Classical']
-        
-        fs = fsspec.filesystem("github", org="Minqi824", repo="ADBench")
-        print(f'Downloading datasets from the remote github repo...')
-        for folder in tqdm(folder_list):
-            save_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'datasets', folder)
-            print(f'Current saving path: {save_path}')
-            if os.path.exists(save_path):
-                print(f'{folder} already exists. Skipping download...')
-                continue
-
-            os.makedirs(save_path, exist_ok=True)
-            fs.get(fs.ls("adbench/datasets/" + folder), save_path, recursive=True)
-
     def data_description(self, X, y):
         des_dict = {}
         des_dict['Samples'] = X.shape[0]

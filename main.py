@@ -1,9 +1,27 @@
 from adbench.run import RunPipeline
-# pipeline = RunPipeline(suffix='ADBench', parallel='unsupervise', realistic_synthetic_mode = None, noise_type=None)
+# pipeline = RunPipeline(
+#     dataset_path='adbench/datasets/Classical/2_annthyroid.npz',
+#     suffix='ADBench',
+#     mode='rla',
+#     parallel='unsupervise',
+#     seed=42
+# )
 # results = pipeline.run()
 
-# pipeline = RunPipeline(suffix='ADBench', parallel='semi-supervise', realistic_synthetic_mode = None, noise_type=None)
+# pipeline = RunPipeline(
+#     dataset_path='adbench/datasets/Classical/2_annthyroid.npz',
+#     suffix='ADBench',
+#     mode='rla',
+#     parallel='semi-supervise',
+#     seed=42
+# )
 # results = pipeline.run()
 
-pipeline = RunPipeline(suffix='ADBench', parallel='supervise', realistic_synthetic_mode = None, noise_type=None)
+pipeline = RunPipeline(
+    dataset_path='adbench/datasets/Classical/2_annthyroid.npz',
+    suffix='ADBench',
+    mode='rla',
+    parallel='supervise',
+    seed=42
+)
 results = pipeline.run()
