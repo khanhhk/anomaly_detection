@@ -1,0 +1,96 @@
+cblof:
+  parameters:
+    n_clusters: 8
+    alpha: 0.9
+    beta: 5
+    use_weights: False
+    check_estimator: False
+
+cof:
+  parameters:
+    n_neighbors: 17
+    method: 'fast'
+
+copod:
+  parameters:
+    n_jobs: 1
+
+deepsvdd:
+  parameters:
+    n_features: 6 # Number of features in the input data
+    use_ae: False
+    hidden_neurons: [64, 32]
+    hidden_activation: 'relu'
+    output_activation: 'sigmoid'
+    optimizer: 'adam'
+    epochs: 100
+    batch_size: 32
+    dropout_rate: 0.2
+    l2_regularizer: 0.1
+    validation_size: 0.1
+    preprocessing: True
+    random_state: null
+
+ecod:
+  parameters:
+    n_jobs: 1
+
+hbos:
+  parameters:
+    n_bins: 10
+    alpha: 0.1
+    tol: 0.5
+
+iforest:
+  parameters:
+    n_estimators: 100
+    max_samples: "auto"
+    contamination: 0.1
+    max_features: 1.0
+    bootstrap: false
+    n_jobs: -1
+    random_state: 42
+    verbose: 0
+
+knn:
+  parameters:
+    n_neighbors: 5
+    method: 'largest'
+    radius: 1.0
+    algorithm: 'auto'
+    leaf_size: 30
+    metric: 'minkowski'
+    p: 2
+    metric_params: null
+    n_jobs: 1
+
+lof:
+  parameters:
+    n_neighbors: 20
+    algorithm: 'auto'
+    leaf_size: 30
+    metric: 'minkowski'
+    p: 2
+    novelty: False
+    n_jobs: 1
+
+ocsvm:
+  parameters:
+    kernel: "rbf"
+    nu: 0.5
+    degree: 3
+    gamma: "auto"
+    coef0: 0.0
+    max_iter: -1
+
+pca:
+  parameters:
+    n_components: null
+    n_selected_components: null
+    copy: True
+    whiten: False
+    tol: 0.0
+    iterated_power: 'auto'
+    random_state: null
+    weighted: True
+    standardization: True
